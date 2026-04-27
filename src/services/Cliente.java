@@ -1,20 +1,15 @@
 package services;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.core.MediaType;
 
-@Path("Cliente")
 public class Cliente {
 
-	
-	
-	@Path("hola")
-	@GET
-	@Consumes(MediaType.TEXT_PLAIN)
-	public String hola() {
-		return ("¡Hola mundo!");
+	public static void main(String[] args) {
+		// Instrucciones al usuario
+		System.out.println("Estas son las instrucciones:");
+		
+		// Hacer Start a los procesos
+		// Tienen que esperar
+		// Ante la orden del usuario, comienzan a hacer cosas
 	}
 
 }
