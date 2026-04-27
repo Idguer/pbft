@@ -14,7 +14,7 @@ public class Cliente {
 	@GET
 	@Consumes(MediaType.TEXT_PLAIN)
 	public String hola() {
-		return ("¡Hola mundo!");
+		return ("Â¡Hola mundo!");
 	}
 
 }
