@@ -1,7 +1,6 @@
 package services;
 
-
-public class Cliente {
+class Cliente {
 	public final int numProcesos = 6;
 	
 	public static void main(String[] args) {
@@ -26,5 +25,55 @@ public class Cliente {
 	// Crear método para mostrar una tabla con la información
 	
 	// Crear método para mostrar las instrucciones
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	/*
+	 * EJEMPLO CREAR HILOS
+	 * 
+	 * 
+	 * 
+	 * long tIni = System.currentTimeMillis();
+		
+		Thread atleta1 = new Atleta("Margarete", 1);
+		Thread atleta2 = new Atleta("Lauren", 2);
+		Thread atleta3 = new Atleta("Marta", 3);
+		Thread atleta4 = new Atleta("Jasmine", 4);
+		List<Thread> atletas = new ArrayList<>();
+		atletas.add(atleta1);
+		atletas.add(atleta2);
+		atletas.add(atleta3);
+		atletas.add(atleta4);
+		
+		System.out.println("Bienvenidos a la carrera\n");
+		for(Thread actAtleta : atletas) {
+			actAtleta.start();
+		}
+		try {
+			for(Thread actAtleta : atletas) {
+				actAtleta.join();
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		long tFin = System.currentTimeMillis();
+		double tRun = (tFin-tIni) / 1000.0;
+		System.out.println("\nTiempo total de la carrera: " + tRun + " segundos");
+		
+	 */
 
 }
