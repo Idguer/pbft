@@ -18,13 +18,13 @@ class Cliente {
 	
 	
 	
-	// Crear método para modificar el estado de fallo de un proceso
+	// Crear metodo para modificar el estado de fallo de un proceso
 	
-	// Crear método para cambiar el valor de la variable de un proceso
+	// Crear metodo para cambiar el valor de la variable de un proceso
 	
-	// Crear método para mostrar una tabla con la información
+	// Crear metodo para mostrar una tabla con la informacion
 	
-	// Crear método para mostrar las instrucciones
+	// Crear metodo para mostrar las instrucciones
 	
 	
 	
