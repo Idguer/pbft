@@ -1,12 +1,34 @@
 package services;
 
 import java.util.Scanner;
+import java.util.List;
+import java.util.ArrayList;
 
-class Cliente {
+class Cliente extends Thread {
 	public final int numProcesos = 6;
 	
 	public static void main(String[] args) {
 		Cliente cliente = new Cliente();
+		
+		
+		List<Thread> procesos = new ArrayList<>();
+		
+		for(int i = 0; i < cliente.numProcesos; i++) {
+			procesos.add(new Proceso(i, false, cliente.numProcesos));
+		}
+		
+		for(Thread px : procesos) {
+			px.start();
+		}
+
+		
+		
+		
+		
+		
+		
+		
+		
 		
 		String respuesta;
 		Scanner sc = new Scanner(System.in);
@@ -32,7 +54,7 @@ class Cliente {
 						if (respuesta.length() > 1) {
 							int idProceso = Integer.parseInt(respuesta.substring(1).trim()); // permitir más de 6
 																								// procesos o no?
-							if (idProceso < 0 || idProceso > numProcesos - 1) {
+							if (idProceso < 0 || idProceso > cliente.numProcesos - 1) {
 								System.out.println("Error: rango de ids 0-5");
 							} else {
 								cliente.fallo(idProceso);
@@ -82,6 +104,9 @@ class Cliente {
 		// Hacer Start a los procesos
 		// Tienen que esperar
 		// Ante la orden del usuario, comienzan a hacer cosas
+		
+		
+
 	}
 	
 	
