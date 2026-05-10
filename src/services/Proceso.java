@@ -1,5 +1,7 @@
 package services;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class Proceso extends Thread {
@@ -13,6 +15,8 @@ public class Proceso extends Thread {
 	public int numProcesos;
 	public String[] ips;
 	public int quorum;
+	public List<Proceso> todosProcesos;
+	public Cliente cliente;
 
 
 	public Proceso(int id, boolean tieneError, int numProcesos) {
@@ -23,37 +27,83 @@ public class Proceso extends Thread {
 		this.compromisos = new int[numProcesos];
 		this.comisiones = new int[numProcesos];
 		//this.ips = new String[numProcesos];
-		this.quorum = 0;
+		this.quorum = numProcesos / 2 + 1;
+	}
+	
+	@Override
+	public void run() {
+		// Quede a la espera simplemente.
 	}
 	
 	
-	public void propuesta(String ip, int numP, int v) {
-		this.variable = 0;
-		for(int i = 0; i < this.numProcesos; i++) {
-			this.compromisos[i] = 0;
-			this.comisiones[i] = 0;
+	public synchronized void propuesta(int v) {
+		// Reset de estado
+		this.variable = -1;
+		this.compromisos = new int[100];
+		this.comisiones = new int[100];
+		
+		int valorEnvio;
+		if(error) {
+			valorEnvio = numeroGenAleatorio(10);
+		} else {
+			valorEnvio = v;
 		}
-		if(this.error) compromiso("", this.id, 333); // Programar parte de num aleatorio
-		else compromiso("", this.id, v);
+		System.out.println("[P" + this.id + "] prop. recibida: " + v + " :: multidifunde compromiso(" + valorEnvio + ")");
+		for(Proceso p : this.todosProcesos) {
+			p.compromiso(valorEnvio);
+		}
+		
+		
+		
+		// this.variable = 0;
+		// for(int i = 0; i < this.numProcesos; i++) {
+		// 	this.compromisos[i] = 0;
+		// 	this.comisiones[i] = 0;
+		// }
+		// if(this.error) compromiso("", this.id, 333); // Programar parte de num aleatorio
+		// else compromiso("", this.id, v);
 		
 		//Arrays.fill(this.compromisos, 0);
 	}
 	
-	public void compromiso(String ip, int numP, int v) {
-		// Recibe los numeros
-		// Lo guarda en el sitio
-		// Si hay quorum, comision
-		this.compromisos[numP] = v;
-		if(v == this.variable) this.quorum++;
-		if(quorum >= 3) comision();
+	public synchronized void compromiso(int v) {
+		
+		compromisos[v]++;
+		
+		System.out.println("[P" + this.id + "] compr. recibido: " + v + " (total: " + compromisos[v] + "/" + quorum + ")");
+		
+		if(compromisos[v] >= quorum) {
+			// Evitar volver a emitir para mismo valor
+			if(comisiones[v] == 0) {
+				System.out.println("[P" + id + "] quórum de compromisos :: emite comision(" + v + ")");
+				for(Proceso p : todosProcesos) {
+					p.comision(v);
+				}
+			}
+		}
 	}
 	
-	public void comision() {
-		//ToDo();
+	public synchronized void comision(int v) {
+		comisiones[v]++;
+		
+		System.out.println("[P" + id + "] comisión recibida " + v + " (total: " + comisiones[v] + "/" + quorum + ")");
+		
+		if(comisiones[v] >= quorum) {
+			if(variable == -1) {
+				variable = v;
+				System.out.println("[P" + id + "] quórum de comisiones :: variable = " + v + ", enviando confirmación al cliente");
+				cliente.confirmacion();
+			}
+		}
 	}
 	
 	public void confirmacion() {
 		//ToDo();
+	}
+	
+	public int numeroGenAleatorio(int max) {
+		// Gestionar posibilidad de que max sea menor que 0 para evitar errores
+		return (int)Math.floor(Math.random() * max + 1);
 	}
 
 }

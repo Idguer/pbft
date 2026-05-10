@@ -6,18 +6,23 @@ import java.util.ArrayList;
 
 class Cliente extends Thread {
 	public final int numProcesos = 6;
+	public List<Proceso> procesos = new ArrayList<>();
 	
 	public static void main(String[] args) {
 		Cliente cliente = new Cliente();
 		
 		
-		List<Thread> procesos = new ArrayList<>();
 		
 		for(int i = 0; i < cliente.numProcesos; i++) {
-			procesos.add(new Proceso(i, false, cliente.numProcesos));
+			cliente.procesos.add(new Proceso(i, false, cliente.numProcesos));
 		}
 		
-		for(Thread px : procesos) {
+		for(Proceso px : cliente.procesos) {
+			px.todosProcesos = cliente.procesos;
+			px.cliente = cliente;
+		}
+		
+		for(Thread px : cliente.procesos) {
 			px.start();
 		}
 
@@ -114,25 +119,51 @@ class Cliente extends Thread {
 	// Crear metodo para modificar el estado de fallo de un proceso
 	public void fallo(int id) 
 	{
-		
+		Proceso p = procesos.get(id);
+		p.error = !p.error;
+		System.out.println("Proceso " + id + " :: error: " + p.error);
 	}
 
 	// Crear metodo para cambiar el valor de la variable
 	public void cambiarValor(int x) 
 	{
 		// mandar de alguna forma a los procesos el valor de x
-		for(int i = 0; i < numProcesos; i++) 
-		{
-			
+		for(Proceso p: procesos) {
+			p.propuesta(x);
 		}
 	}
 	
 	// Crear metodo para mostrar una tabla con la informacion
 	public void mostrarEstado() 
 	{
+		String cadena;
 		// cabecera
 		System.out.println("id\tvar\tcompromisos\terror");
 		//el cliente tiene que recibir la informaciÃ³n de los procesos
+		for(Proceso p: procesos)
+		{
+			StringBuilder sbState = new StringBuilder();
+			for(int c = 0; c <= 100; c++)
+			{
+				if(p.compromisos[c] > 0)
+				{
+					for(int d = 0; d < p.compromisos[c]; d++)
+					{
+						if(sbState.length() > 0) sbState.append(",");
+						sbState.append(c);
+					}
+				}
+			}
+			if(p.variable == -1)
+			{
+				cadena = "-";
+			}
+			else
+			{
+				cadena = String.valueOf(p.variable);
+			}
+			System.out.println(p.id + "\t" + cadena + "\t" + sbState + "\t" + p.error);
+		}
 	}
 		
 	// Crear metodo para mostrar las instrucciones
@@ -146,54 +177,19 @@ class Cliente extends Thread {
 						+ "Ayuda (h): muestra las opciones disponibles y sus combinaciones de teclas.\n");
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	/*
-	 * EJEMPLO CREAR HILOS
-	 * 
-	 * 
-	 * 
-	 * long tIni = System.currentTimeMillis();
-		
-		Thread atleta1 = new Atleta("Margarete", 1);
-		Thread atleta2 = new Atleta("Lauren", 2);
-		Thread atleta3 = new Atleta("Marta", 3);
-		Thread atleta4 = new Atleta("Jasmine", 4);
-		List<Thread> atletas = new ArrayList<>();
-		atletas.add(atleta1);
-		atletas.add(atleta2);
-		atletas.add(atleta3);
-		atletas.add(atleta4);
-		
-		System.out.println("Bienvenidos a la carrera\n");
-		for(Thread actAtleta : atletas) {
-			actAtleta.start();
+	public synchronized void confirmacion() {
+		confirmaciones++;
+		if(confirmaciones >= quorum()) {
+			System.out.println("\n[CONSENSO] Valor aceptado por quórum de procesos.");
+			confirmaciones = 0;
 		}
-		try {
-			for(Thread actAtleta : atletas) {
-				actAtleta.join();
-			}
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
-		
-		long tFin = System.currentTimeMillis();
-		double tRun = (tFin-tIni) / 1000.0;
-		System.out.println("\nTiempo total de la carrera: " + tRun + " segundos");
-		
-	 */
+	}
+	private int confirmaciones = 0;
+	private int quorum() {
+		return numProcesos / 2 + 1;
+	}
+	
+	
+	
 
 }
