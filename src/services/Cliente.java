@@ -166,7 +166,7 @@ class Cliente extends Thread {
 			{
 				cadena = String.valueOf(p.variable);
 			}
-			System.out.println(p.id + "\t" + cadena + "\t" + sbState + "\t" + p.error);
+			System.out.println(p.id + "\t" + cadena + "\t" + sbState + "\t\t" + p.error);
 		}
 	}
 		

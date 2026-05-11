@@ -36,7 +36,7 @@ public class Proceso extends Thread {
 	}
 	
 	
-	public synchronized void propuesta(int v) {
+	public void propuesta(int v) {
 		// Reset de estado
 		this.variable = -1;
 		this.compromisos = new int[200];
@@ -86,12 +86,12 @@ public class Proceso extends Thread {
 	public synchronized void comision(int v) {
 		comisiones[v]++;
 		
-		System.out.println("[P" + id + "] comisi�n recibida " + v + " (total: " + comisiones[v] + "/" + quorum + ")");
+		System.out.println("[P" + id + "] comision recibida " + v + " (total: " + comisiones[v] + "/" + quorum + ")");
 		
 		if(comisiones[v] >= quorum) {
 			if(variable == -1) {
 				variable = v;
-				System.out.println("[P" + id + "] qu�rum de comisiones :: variable = " + v + ", enviando confirmaci�n al cliente");
+				System.out.println("[P" + id + "] quorum de comisiones :: variable = " + v + ", enviando confirmacion al cliente");
 				cliente.confirmacion();
 			}
 		}
