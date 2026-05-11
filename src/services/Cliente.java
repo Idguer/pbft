@@ -89,6 +89,7 @@ class Cliente extends Thread {
 
 			} catch (Exception e) {
 				System.out.println("Error en el formato");
+				e.printStackTrace();
 			}
 		}
 		
@@ -128,8 +129,11 @@ class Cliente extends Thread {
 	public void cambiarValor(int x) 
 	{
 		// mandar de alguna forma a los procesos el valor de x
+		//for(Proceso p: procesos) {
+		//	p.propuesta(x);
+		//}
 		for(Proceso p: procesos) {
-			p.propuesta(x);
+			new Thread(() -> p.propuesta(x)).start();
 		}
 	}
 	

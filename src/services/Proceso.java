@@ -39,8 +39,8 @@ public class Proceso extends Thread {
 	public synchronized void propuesta(int v) {
 		// Reset de estado
 		this.variable = -1;
-		this.compromisos = new int[100];
-		this.comisiones = new int[100];
+		this.compromisos = new int[200];
+		this.comisiones = new int[200];
 		
 		int valorEnvio;
 		if(error) {
@@ -75,7 +75,7 @@ public class Proceso extends Thread {
 		if(compromisos[v] >= quorum) {
 			// Evitar volver a emitir para mismo valor
 			if(comisiones[v] == 0) {
-				System.out.println("[P" + id + "] quórum de compromisos :: emite comision(" + v + ")");
+				System.out.println("[P" + id + "] quï¿½rum de compromisos :: emite comision(" + v + ")");
 				for(Proceso p : todosProcesos) {
 					p.comision(v);
 				}
@@ -86,12 +86,12 @@ public class Proceso extends Thread {
 	public synchronized void comision(int v) {
 		comisiones[v]++;
 		
-		System.out.println("[P" + id + "] comisión recibida " + v + " (total: " + comisiones[v] + "/" + quorum + ")");
+		System.out.println("[P" + id + "] comisiï¿½n recibida " + v + " (total: " + comisiones[v] + "/" + quorum + ")");
 		
 		if(comisiones[v] >= quorum) {
 			if(variable == -1) {
 				variable = v;
-				System.out.println("[P" + id + "] quórum de comisiones :: variable = " + v + ", enviando confirmación al cliente");
+				System.out.println("[P" + id + "] quï¿½rum de comisiones :: variable = " + v + ", enviando confirmaciï¿½n al cliente");
 				cliente.confirmacion();
 			}
 		}
